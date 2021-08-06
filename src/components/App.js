@@ -3,7 +3,7 @@ import { data } from "../resources/data/data";
 import {addMovies} from '../actions'
 import Navbar from "./Navbar";
 import MovieCard from "./MovieCard";
-
+import {showFavouriteTab,showMoviesTab} from '../actions';
 
 class App extends React.Component{
 
@@ -23,18 +23,44 @@ class App extends React.Component{
     console.log(this.props.store.getState());
   }
 
+  isFavourite = (movie) => {
+    const {favList} = this.props.store.getState();
+
+    if(favList.indexOf(movie) === -1){
+      return false;
+    }
+    return true;
+  }
+
+  
+  handleFavTabClick = () => {
+    this.props.store.dispatch(showFavouriteTab());
+  }
+  handleMoviesTabClick = () => {
+    this.props.store.dispatch(showMoviesTab());
+  }
+
+
   render(){
-    const {list} = this.props.store.getState();
+    //const {store} = this.props;
+    const {list,favList,isFavTab} = this.props.store.getState();
+    const renderList = isFavTab ? favList :list;
+    console.log('State',this.props.store.getState());
     return (
       <div className="App">
       <Navbar/>
       <div className="main">
         <div className="tabs">
-          <div className="tab">Movies</div>
-          <div className="tab">Favourites</div>
+          <div className="tab" onClick={this.handleMoviesTabClick}>Movies</div>
+          <div className="tab" onClick={this.handleFavTabClick}>Favourites</div>
         </div>
         <div className="list">
-          {list.map((movie,index) =>(<MovieCard movie={movie} key = {`movieId_${index}`}/>))}
+          {renderList.map((movie,index) => (<MovieCard 
+          movie = {movie} 
+          key = {`movieId_${index}`} 
+          dispatch = {this.props.store.dispatch}
+          isFavourite = {this.isFavourite(movie)}
+          />))}
         </div>
       </div>
       </div>
