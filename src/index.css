@@ -99,6 +99,7 @@ body {
 .main .tabs {
   display: flex;
   font-size: 20px;
+  padding: 25px 0;
 }
 .main .tabs .tab {
   background: #fff;

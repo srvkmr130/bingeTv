@@ -1,4 +1,4 @@
-import {ADD_MOVIES,ADD_FAVOURITE,REMOVE_FAVOURITE,SHOW_FAVOURITE_TAB,SHOW_MOVIES_TAB} from '../actions';
+import {ADD_MOVIES,ADD_FAVOURITE,REMOVE_FAVOURITE,SHOW_FAVOURITE_TAB} from '../actions';
 
 const initialMoviesState = {
     list:[],
@@ -34,12 +34,7 @@ export default function movies(state=initialMoviesState,action) {
         case SHOW_FAVOURITE_TAB:
             return{
                 ...state,
-                isFavTab:true  
-            }
-        case SHOW_MOVIES_TAB:
-            return{
-                ...state,
-                isFavTab:false  
+                isFavTab:action.value  
             }
         default :
             return state;

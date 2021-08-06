@@ -4,7 +4,6 @@ export const ADD_MOVIES = 'ADD_MOVIES';
 export const ADD_FAVOURITE = 'ADD_FAVOURITE';
 export const REMOVE_FAVOURITE = 'REMOVE_FAVOURITE';
 export const SHOW_FAVOURITE_TAB ="SHOW_FAVOURITE_TAB";
-export const SHOW_MOVIES_TAB = "SHOW_MOVIES_TAB";
 
 
 // action creators
@@ -27,13 +26,9 @@ export function removeFavourite(movie){
     }
 }
 
-export function showFavouriteTab(){
+export function showFavouriteTab(value){
     return {
-        type : SHOW_FAVOURITE_TAB
-    }
-}
-export function showMoviesTab(){
-    return {
-        type : SHOW_MOVIES_TAB
+        type : SHOW_FAVOURITE_TAB,
+        value
     }
 }
