@@ -72,7 +72,4 @@ export function search(state = initialSearchState, action) // we can't have muli
 
 
 // Use redux's combineReducer which serves the same purpose as above (rootReducer)
-export default function combineReducers({
-    movies,
-    search
-});
+export default combineReducers({movies,search});
