@@ -24,7 +24,8 @@ class App extends React.Component{
   }
 
   isFavourite = (movie) => {
-    const {favList} = this.props.store.getState();
+    const {movies} = this.props.store.getState();
+    const {favList} = movies;
 
     if(favList.indexOf(movie) === -1){
       return false;
@@ -38,8 +39,8 @@ class App extends React.Component{
   }
   
   render(){
-    //const {store} = this.props;
-    const {list,favList,isFavTab} = this.props.store.getState();
+    const {movies} = this.props.store.getState(); // this will have : {movies:{} , search:{}}
+    const {list,favList,isFavTab} = movies; 
     const renderList = isFavTab ? favList :list;
     console.log('State',this.props.store.getState());
     return (
