@@ -1,6 +1,13 @@
 import { combineReducers } from 'redux';
 
-import {ADD_MOVIES,ADD_FAVOURITE,REMOVE_FAVOURITE,SHOW_FAVOURITE_TAB} from '../actions';
+import {
+    ADD_MOVIES,
+    ADD_FAVOURITE,
+    REMOVE_FAVOURITE,
+    SHOW_FAVOURITE_TAB,
+    ADD_MOVIE_TO_LIST,
+    ADD_SEARCH_RESULT
+} from '../actions';
 
 
 // Movie Reducer
@@ -40,6 +47,11 @@ export function movies(state=initialMoviesState, action) {
                 ...state,
                 isFavTab:action.value  
             }
+        case ADD_MOVIE_TO_LIST:    // This action is expressed when we click on Add To Movies button from Search Result.
+            return{
+                ...state,
+                list:[action.movie, ...state.list]
+            }
         default :
             return state;
     }
@@ -48,12 +60,28 @@ export function movies(state=initialMoviesState, action) {
 
 // Search Reducer
 const initialSearchState = {
-    result:{}
+    result:{},
+    showSearchResults:false
 };
 
 export function search(state = initialSearchState, action) // we can't have muliple default exports in a same file
 {
-    return state;
+    switch(action.type){
+        case ADD_SEARCH_RESULT:
+            return{
+                ...state,
+                result: action.movie,
+                showSearchResults:true
+            }
+        case ADD_MOVIE_TO_LIST:{
+            return{
+                ...state,
+                showSearchResults:false
+            }
+        }
+        default :
+            return state;
+    }
 }
 
 
