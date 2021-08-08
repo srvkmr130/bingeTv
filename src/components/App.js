@@ -4,7 +4,7 @@ import {addMovies} from '../actions'
 import Navbar from "./Navbar";
 import MovieCard from "./MovieCard";
 import {showFavouriteTab} from '../actions';
-
+import {StoreContext} from '../index';
 class App extends React.Component{
 
   componentDidMount(){
@@ -45,8 +45,7 @@ class App extends React.Component{
     console.log('State',this.props.store.getState());
     return (
       <div className="App">
-      <Navbar
-       dispatch = {this.props.store.dispatch} search={search}/>
+      <Navbar search={search}/>
       <div className="main">
         <div className="tabs">
           <div className={`tab ${isFavTab? '':'active-tabs'}`} onClick={()=>this.onChangeTab(false)}>Movies</div>
@@ -67,4 +66,16 @@ class App extends React.Component{
   }
 }
 
-export default App;
+// Creating a wrapper for App , so that we can access the store as props in App component
+class AppWrapper extends React.Component{  
+  render(){
+    return (
+      <StoreContext.Consumer>
+        { (store)=> <App store={store}/>}
+      </StoreContext.Consumer>
+    )
+  }
+}
+
+// EXporting AppWrapper beacuse it will internally call App component with exact value
+export default AppWrapper;
