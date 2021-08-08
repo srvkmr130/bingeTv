@@ -4,27 +4,27 @@ import {addMovies} from '../actions'
 import Navbar from "./Navbar";
 import MovieCard from "./MovieCard";
 import {showFavouriteTab} from '../actions';
-import {StoreContext} from '../index';
+import {connect} from '../index';
 class App extends React.Component{
 
   componentDidMount(){
     const {store} = this.props;
 
-    // Step 1: here we subscribe to the get the changes updated in UI
-    let v = store.subscribe(() => {
-      console.log('UPDATED');
-      this.forceUpdate();
-    });
-    console.log(typeof(v));
+    // Step 1: here we subscribe to the get the changes updated in UI . Note here we used HOC to get it done .
+        // let v = store.subscribe(() => {
+        //   console.log('UPDATED');
+        //   this.forceUpdate();
+        // });
+        // console.log(typeof(v));
 
     // Step 2: make an api call to fetch data , here we are fetching directly from data.js for ease
     // Step 3: Dispatch action
-    store.dispatch(addMovies(data));
-    console.log(this.props.store.getState());
+    this.props.dispatch(addMovies(data));
+    // console.log(this.props.store.getState());
   }
 
   isFavourite = (movie) => {
-    const {movies} = this.props.store.getState();
+    const {movies} = this.props;
     const {favList} = movies;
 
     if(favList.indexOf(movie) === -1){
@@ -35,14 +35,14 @@ class App extends React.Component{
 
   
   onChangeTab = (value) => {
-    this.props.store.dispatch(showFavouriteTab(value));
+    this.props.dispatch(showFavouriteTab(value));
   }
   
   render(){
-    const {movies,search} = this.props.store.getState(); // this will have : {movies:{} , search:{}}
+    const {movies,search} = this.props; // this will have : {movies:{} , search:{}}
     const {list,favList,isFavTab} = movies; 
     const renderList = isFavTab ? favList :list;
-    console.log('State',this.props.store.getState());
+    console.log('State',this.props);
     return (
       <div className="App">
       <Navbar search={search}/>
@@ -55,7 +55,7 @@ class App extends React.Component{
           {renderList.map((movie,index) => (<MovieCard 
           movie = {movie} 
           key = {`movieId_${index}`} 
-          dispatch = {this.props.store.dispatch}
+          dispatch = {this.props.dispatch}
           isFavourite = {this.isFavourite(movie)}
           />))}
         </div>
@@ -66,16 +66,31 @@ class App extends React.Component{
   }
 }
 
-// Creating a wrapper for App , so that we can access the store as props in App component
-class AppWrapper extends React.Component{  
-  render(){
-    return (
-      <StoreContext.Consumer>
-        { (store)=> <App store={store}/>}
-      </StoreContext.Consumer>
-    )
-  }
+
+
+
+// // Creating a wrapper for App , so that we can access the store as props in App component
+//     class AppWrapper extends React.Component{  
+//       render(){
+//         return (
+//           <StoreContext.Consumer>
+//             { (store)=> <App store={store}/>}
+//           </StoreContext.Consumer>
+//         )
+//       }
+//     }
+
+// // EXporting AppWrapper beacuse it will internally call App component with exact value
+//     export default AppWrapper;
+
+
+
+function mapStateToProps(state){
+  return{
+    movies:state.movies,
+    search:state.search
+  };
 }
 
-// EXporting AppWrapper beacuse it will internally call App component with exact value
-export default AppWrapper;
+const connectedAppComponent = connect(mapStateToProps)(App);
+export default connectedAppComponent;
