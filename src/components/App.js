@@ -4,11 +4,13 @@ import {addMovies} from '../actions'
 import Navbar from "./Navbar";
 import MovieCard from "./MovieCard";
 import {showFavouriteTab} from '../actions';
-import {connect} from '../index';
+import {connect} from 'react-redux';
+
+
+
 class App extends React.Component{
 
   componentDidMount(){
-    const {store} = this.props;
 
     // Step 1: here we subscribe to the get the changes updated in UI . Note here we used HOC to get it done .
         // let v = store.subscribe(() => {
@@ -65,9 +67,6 @@ class App extends React.Component{
     );
   }
 }
-
-
-
 
 // // Creating a wrapper for App , so that we can access the store as props in App component
 //     class AppWrapper extends React.Component{  

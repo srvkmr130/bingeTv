@@ -1,7 +1,8 @@
-// Pacakages imports
-import React,{createContext} from 'react';
+// Packages imports
+import React from 'react';
 import ReactDOM from 'react-dom';
 import thunk from 'redux-thunk';
+import { Provider } from 'react-redux';
 import { createStore, applyMiddleware} from 'redux';
 
 // File imports
@@ -35,61 +36,61 @@ console.log('store',store);
 console.log('State',store.getState());
 
 
-// create a store context 
-export const StoreContext = createContext();
+// // create a store context 
+//         export const StoreContext = createContext();
 
-class Provider extends React.Component{
-    render(){
-        const {store} = this.props;
-        return <StoreContext.Provider value={store}>
-            {this.props.children}  
-        </StoreContext.Provider>
-    }
-}
-
-
-// Thsi will return a connectedComponent
-export function connect(callback){
-    // use currying to achieve like this: connectedAppComponent = connect(callback)(App)
-    return function (Component){
-        // this will be used as High Order Component 
-        class ConnectedComponent extends React.Component{
-            constructor(props){
-                super(props);
-                this.unsubscribe = this.props.store.subscribe(()=> this.forceUpdate());
-            }
-
-            componentWillUnmount(){
-                this.unsubscribe(); // here we are unsubscribing the forceUpdate to prevent memory leaks , when component will unmount
-            }
-
-            render(){
-                const { store } = this.props;
-                const state = store.getState();
-                const dataToBePassedAsProps = callback(state);
-                return(
-                    <Component {...dataToBePassedAsProps} dispatch={store.dispatch}/>
-                );
-            }
-        }
+//         class Provider extends React.Component{
+//             render(){
+//                 const {store} = this.props;
+//                 return <StoreContext.Provider value={store}>
+//                     {this.props.children}  
+//                 </StoreContext.Provider>
+//             }
+//         }
 
 
-        //Here we wrapped ConnectedComponent so that we can pass store as props in it and we can consume the store in whole component(including componentDidMount, etc) rather than using in render alone. 
-        class ConnectedComponentWrapper extends React.Component{
-            render(){
-                return(
-                    <StoreContext.Consumer>
-                        {(store) => <ConnectedComponent store={store}/>}
-                    </StoreContext.Consumer>
-                );
-            }
-        }
+// // This will return a connectedComponent
+//         export function connect(callback){
+//             // use currying to achieve like this: connectedAppComponent = connect(callback)(App)
+//             return function (Component){
+//                 // this will be used as High Order Component 
+//                 class ConnectedComponent extends React.Component{
+//                     constructor(props){
+//                         super(props);
+//                         this.unsubscribe = this.props.store.subscribe(()=> this.forceUpdate());
+//                     }
 
-        return ConnectedComponentWrapper;
-    }
-}
+//                     componentWillUnmount(){
+//                         this.unsubscribe(); // here we are unsubscribing the forceUpdate to prevent memory leaks , when component will unmount
+//                     }
 
-console.log('Context',StoreContext);
+//                     render(){
+//                         const { store } = this.props;
+//                         const state = store.getState();
+//                         const dataToBePassedAsProps = callback(state);
+//                         return(
+//                             <Component {...dataToBePassedAsProps} dispatch={store.dispatch}/>
+//                         );
+//                     }
+//                 }
+
+
+//                 //Here we wrapped ConnectedComponent so that we can pass store as props in it and we can consume the store in whole component(including componentDidMount, etc) rather than using in render alone. 
+//                 class ConnectedComponentWrapper extends React.Component{
+//                     render(){
+//                         return(
+//                             <StoreContext.Consumer>
+//                                 {(store) => <ConnectedComponent store={store}/>}
+//                             </StoreContext.Consumer>
+//                         );
+//                     }
+//                 }
+
+//                 return ConnectedComponentWrapper;
+//             }
+//         }
+
+
 ReactDOM.render(
     <Provider store={store}>
         <App store ={store}/>
